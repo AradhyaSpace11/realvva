@@ -24,12 +24,37 @@ YOLO_MODEL_PATH = os.path.join(YOLO_ROOT, "models", "run", "weights", "best.pt")
 # THIS IS THE NEW ATTENTION MODEL
 POLICY_MODEL_PATH = os.path.join(REALVVA_ROOT, "trained_models", "policy_attention.pth")
 
-# Default Video
-video_name = "demovid1.mp4"
-if len(sys.argv) > 1:
-    video_name = sys.argv[1]
+VIDEO_DIR = os.path.join(REALVVA_ROOT, "data", "demovideos")
+
+def select_video():
+    if len(sys.argv) > 1:
+        return sys.argv[1]
     
-VIDEO_PATH = os.path.join(REALVVA_ROOT, "data", "demovideos", video_name)
+    videos = sorted([f for f in os.listdir(VIDEO_DIR) if f.endswith(".mp4")])
+    if not videos:
+        print("No videos found in data/demovideos!")
+        sys.exit(1)
+        
+    print("\nAvailable Demo Videos:")
+    for i, vid in enumerate(videos):
+        print(f"[{i+1}] {vid}")
+    
+    try:
+        choice = input(f"\nSelect video [1-{len(videos)}] (default 1): ").strip()
+        if not choice:
+            return videos[0]
+        idx = int(choice) - 1 # Convert 1-based to 0-based
+        if 0 <= idx < len(videos):
+            return videos[idx]
+        else:
+            print("Invalid index, using default.")
+            return videos[0]
+    except ValueError:
+        print("Invalid input, using default.")
+        return videos[0]
+
+video_name = select_video()
+VIDEO_PATH = os.path.join(VIDEO_DIR, video_name)
 
 # --- ATTENTION MODEL DEFINITION (Must Match Training) ---
 class RobotPolicyAttention(nn.Module):
@@ -128,6 +153,7 @@ def main():
         p.stepSimulation()
         
         cv2.putText(display, "VVA ATTENTION", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 0, 255), 2)
+        cv2.putText(display, f"Video: {video_name}", (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 1)
         display_half = cv2.resize(display, (0,0), fx=0.6, fy=0.6)
         cv2.imshow("Attention Brain", display_half)
         

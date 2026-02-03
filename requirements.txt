@@ -1,0 +1,10 @@
+numpy
+opencv-python
+torch
+torchvision
+ultralytics
+pybullet
+pandas
+pyserial
+matplotlib
+ipykernel

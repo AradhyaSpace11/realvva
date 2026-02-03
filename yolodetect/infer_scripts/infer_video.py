@@ -11,12 +11,36 @@ REALVVA_ROOT = os.path.dirname(YOLO_ROOT) # .../realvva
 # Model Path 
 MODEL_PATH = os.path.join(YOLO_ROOT, "models", "run", "weights", "best.pt")
 
-# Video Source
-video_name = "demovid1.mp4"
-if len(sys.argv) > 1:
-    video_name = sys.argv[1]
+VIDEO_DIR = os.path.join(REALVVA_ROOT, "data", "demovideos")
 
-VIDEO_PATH = os.path.join(REALVVA_ROOT, "data", "demovideos", video_name)
+def select_video():
+    if len(sys.argv) > 1:
+        return sys.argv[1]
+    
+    videos = sorted([f for f in os.listdir(VIDEO_DIR) if f.endswith(".mp4")])
+    if not videos:
+        print("No videos found in data/demovideos!")
+        sys.exit(1)
+        
+    print("\nAvailable Demo Videos:")
+    for i, vid in enumerate(videos):
+        print(f"[{i+1}] {vid}")
+    
+    try:
+        choice = input(f"\nSelect video [1-{len(videos)}] (default 1): ").strip()
+        if not choice:
+            return videos[0]
+        idx = int(choice) - 1 # Convert 1-based to 0-based
+        if 0 <= idx < len(videos):
+            return videos[idx]
+        else:
+            print("Invalid index, using default.")
+            return videos[0]
+    except ValueError:
+        print("Invalid input, using default.")
+        return videos[0]
+
+VIDEO_PATH = os.path.join(VIDEO_DIR, select_video())
 
 def main():
     if not os.path.exists(MODEL_PATH):
