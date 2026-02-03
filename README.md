@@ -31,7 +31,9 @@ Instead of using raw pixels directly, we use **YOLOv8** to extract a low-dimensi
     *   **6**: Target Object (Cube)
 2.  **Centroid Extraction**: For each frame, we detect the bounding boxes of these classes. We calculate the **centroid $(x, y)$** of each box.
 3.  **State Vector**: These centroids are normalized to $[0, 1]$ and flattened into a **14-dimensional state vector**:
-    $$ \text{State} = [J_{0x}, J_{0y}, J_{1x}, J_{1y}, ..., \text{Target}_x, \text{Target}_y] $$
+    ```
+    State = [J0x, J0y, J1x, J1y, ..., Target_x, Target_y]
+    ```
     This vector serves as the input to our control policy.
 
 ---
@@ -56,10 +58,15 @@ This script loads the smoothed YOLO detections (`yolodetect/data/policy_dataset_
 
 ## 4. Setup & Running from Scratch
 
-If you are a new user pulling this repository, follow these steps to get started:
+If you are a new user, follow these steps to clone and run the project:
 
-### 1. Install Dependencies
+### 1. Clone & Install
 ```bash
+# 1. Clone the repository
+git clone https://github.com/AradhyaSpace11/realvva.git
+cd realvva
+
+# 2. Install Dependencies
 pip install -r requirements.txt
 ```
 
