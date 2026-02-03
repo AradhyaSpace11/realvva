@@ -58,6 +58,8 @@ This script loads the smoothed YOLO detections (`yolodetect/data/policy_dataset_
 
 ## 4. Setup & Running from Scratch
 
+> **Note**: This project has been tested and verified on **Ubuntu 22.04**. Compatibility with other OS versions is not guaranteed.
+
 If you are a new user, follow these steps to clone and run the project:
 
 ### 1. Clone & Install
